@@ -38,7 +38,7 @@ res.send('gyvenimas')
 
 app.get("/demo", (req,res) => { res.send (['a', 'b', 'c'])}) 
 
-app.get("/demo/:id", (req,res) => {const id = req.params.id; res.send ([id,cat])})
+app.get("/demo/:id", (req,res) => {const id = req.params.id; res.send ([id])})
 
 app.get("/demo/:cat/:id", (req,res) => {const cat = req.params.cat; const id = req.params.id; res.send ([id,cat])})  
 
@@ -82,8 +82,8 @@ app.post('/api/books', (req, res) => {
 });
 
 // PUT / UPDATE
-app.post('/api/books/:id', (req, res) => {
-    const book = books.find(book => book.id === parseInt(req.params.id));
+app.put('/api/books/:id', (req, res) => {
+    const book = books.find((book) => book.id === parseInt(req.params.id));
     if (!book) return res.status(404).send("Book not found ☹️");
 
     const schema = Joi.object({
@@ -92,13 +92,15 @@ app.post('/api/books/:id', (req, res) => {
     });
 
     const validation = schema.validate(req.body);
+    
 
     if (validation.error) {
         res.status(400).send(validation.error.details[0].message);
         return;
     }
-    book.author = req.body.author,
-    book.title = req.body.title
+
+    book.author = req.body.author;
+    book.title = req.body.title;
     res.send(books);
 });
 
